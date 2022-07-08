@@ -3,6 +3,8 @@ const fs = require('fs')
 const path = require('path');
 
 http.createServer((req, res) =>{
+  
+  // This gets the whole filePath were we can find the document to serve according to the url request
   let filePath = path.join(__dirname, 'public',
   (req.url === '/' ? 'index.html' : req.url)
   )
