@@ -5,13 +5,19 @@ const path = require('path');
 http.createServer((req, res) =>{
   
   // This gets the whole filePath were we can find the document to serve according to the url request
+  // If the req.url is '/' this means we are at the root of the page, so the corresponding file is automatically
+  // hardcoded   
   let filePath = path.join(__dirname, 'public',
   (req.url === '/' ? 'index.html' : req.url)
   )
+  
+  // This will be assigned the type of content that the req.url has, depending on its extension name   
   let contentType = 'text/html';
-
+  
+  // This gets the extension of the path to check it later
   let extname = path.extname(filePath)
-  // Check ext and set content type
+  
+  // Check extname and set contenType
   switch(extname){
     case '.js':
       contentType = 'text/javascript'
@@ -30,8 +36,11 @@ http.createServer((req, res) =>{
       break
   }
   
+  // If the contenType remains as 'text/html', this means that even though it is not the root of the page, it is another
+  // html page that we have to serve, so whatever it is, asisgn it .html as the filePath and serve the corresponding html file
+     // This happens because the request URL just gives us the name of the document but without any extension   
   if(contentType === 'text/html' && extname == '') filePath += '.html'
-  // Other html files do not have an extname?
+
 
 
   fs.readFile(filePath, (err, content) => {
