@@ -42,21 +42,27 @@ http.createServer((req, res) =>{
   if(contentType === 'text/html' && extname == '') filePath += '.html'
 
 
-
+  // With the filepath we got, we not have the document to serve   
   fs.readFile(filePath, (err, content) => {
-    if(err){
+    if(err){       
+      // If no document with the name + extname was found     
       if(err.code === 'ENOENT'){
+        // Send the 404.html from our directory         
         fs.readFile(path.join(__dirname, 'public', '404.html'),
         (err, content) => {
           res.writeHead(200, {'Content-Type': 'text/html'})
           res.end(content, 'utf-8')
         })
+      // If other error appears       
       }else{
+      // Serve the error         
         res.writeHead(500)
         res.end(`Server error: ${err.code}`)
       }
     }else{
+      // Serve the document with the contentType taken by its extension name       
       res.writeHead(200, {'Content-Type': contentType})
+      // And the content value taken by fs.readFile       
       res.end(content, 'utf-8')
     }
   })
